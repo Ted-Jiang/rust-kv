@@ -46,19 +46,18 @@ fn main() -> Result<()>{
     )
         .get_matches();
 
-    // let mut store = matc
-
-    let mut store = KvStore::open(current_dir()?)?;
     match app.subcommand() {
         ("set", Some(args)) => {
             let key = args.value_of("KEY").unwrap();
             let value = args.value_of("VALUE").unwrap();
 
-            // let mut store = KvStore::open(current_dir()?)?;
+            let mut store = KvStore::open(current_dir()?)?;
             store.set(key.to_string(), value.to_string())?;
         }
         ("get", Some(args)) => {
             let key = args.value_of("KEY").unwrap();
+
+            let mut store = KvStore::open(current_dir()?)?;
             if let Some(val) = store.get(key.to_string())? {
                 println!("{}", val);
             }else {
@@ -67,6 +66,7 @@ fn main() -> Result<()>{
         }
         ("rm", Some(args)) => {
             let key = args.value_of("KEY").unwrap();
+            let mut store = KvStore::open(current_dir()?)?;
             match store.remove(key.to_string()) {
                 Ok(_) => {}
                 Err(KvsError::KeyNotFound) => {
