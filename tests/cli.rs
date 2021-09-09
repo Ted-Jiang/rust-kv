@@ -272,7 +272,8 @@ fn cli_access_server(engine: &str, addr: &str) {
         .args(&["rm", "key2", "--addr", addr])
         .current_dir(&temp_dir)
         .assert()
-        .failure();
+        .failure()
+        .stderr(contains("Key not found"));
 
     Command::cargo_bin("kvs-client")
         .unwrap()
